@@ -1,0 +1,38 @@
+package jdbc;
+
+import com.mysql.cj.jdbc.MysqlDataSource;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class EmployeesMain {
+
+
+    public static void main(String[] args) {
+        MysqlDataSource dataSource = new MysqlDataSource();
+        dataSource.setURL("jdbc:mysql://localhost:3306/employees?useUnicode=true");
+        dataSource.setUser("employees");
+        dataSource.setPassword("employees");
+        /*try (
+                Connection conn = dataSource.getConnection();
+                Statement stmt = conn.createStatement()) {
+
+            stmt.executeUpdate("INSERT INTO employees(emp_name) VALUES ('John Doe')");
+
+        } catch (SQLException se) {
+            throw new IllegalStateException("Can't insert!");
+        }*/
+        try (
+                Connection conn = dataSource.getConnection();
+                PreparedStatement stmt = conn.prepareStatement("INSERT INTO employees(emp_name) VALUES (?)")) {
+
+            stmt.setString(1, "Jack Doe");
+            stmt.executeUpdate();
+
+        } catch (SQLException se) {
+            throw new IllegalStateException("Can't insert!");
+        }
+    }
+}
