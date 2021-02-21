@@ -10,6 +10,12 @@ import javax.sql.DataSource;
 
 import javax.sql.DataSource;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+
 
 class EmployeesDaoTest {
 
@@ -25,7 +31,7 @@ class EmployeesDaoTest {
         Flyway flyway = new Flyway();
         flyway.setDataSource(dataSource);
 
-        //flyway.clean();
+        flyway.clean();
         flyway.migrate();
         System.out.println("Kész!");
 
@@ -34,14 +40,31 @@ class EmployeesDaoTest {
 
     @Test
     public void testInsert() {
-
+        employeesDao.createEmployee("John Doe");
+        assertEquals(Arrays.asList("John Doe"), employeesDao.listEmployeeNames());
     }
 
     @Test
-    void listEmployeeNames() {
+    public void testById(){
+        long id = employeesDao.createEmployee("Jane Doe");
+        System.out.println(id);
+        id = employeesDao.createEmployee("Jack Doe");
+        System.out.println(id);
+        String name = employeesDao.findEmployeeNameById(id);
+        assertEquals("Jack Doe", name);
     }
 
     @Test
-    void findEmployeeNameById() {
+    public void testCreateEmployees(){
+        employeesDao.createEmployees(Arrays.asList("Jack Doe", "Jane Doe", "Joe Doe"));
+        List<String> names = employeesDao.listEmployeeNames();
+        assertEquals(Arrays.asList("Jack Doe", "Jane Doe", "Joe Doe"), names);
+    }
+
+    @Test
+    public void testCreateEmployeesRollback(){
+        employeesDao.createEmployees(Arrays.asList("Jack Doe", "Jane Doe", "xJoe Doe"));
+        List<String> names = employeesDao.listEmployeeNames();
+        assertEquals(Collections.emptyList(), names);
     }
 }

@@ -13,16 +13,53 @@ public class EmployeesDao {
         this.dataSource = dataSource;
     }
 
-    public void createEmployee(String name) {
+    public long createEmployee(String name) {
         try (
                 Connection conn = dataSource.getConnection();
-                PreparedStatement stmt = conn.prepareStatement("INSERT INTO employees(emp_name) VALUES (?)")) {
+                PreparedStatement stmt = conn.prepareStatement("INSERT INTO employees(emp_name) VALUES (?)"
+                        , Statement.RETURN_GENERATED_KEYS)) {
 
             stmt.setString(1, name);
             stmt.executeUpdate();
 
+            return getIdByStatement(stmt);
+
         } catch (SQLException se) {
             throw new IllegalStateException("Can't insert!");
+        }
+    }
+
+    public void createEmployees(List<String> names){
+        try (Connection conn = dataSource.getConnection()){
+            conn.setAutoCommit(false);
+
+            try (PreparedStatement stmt = conn.prepareStatement("INSERT INTO employees(emp_name) VALUES (?)")){
+                for(String name:names){
+                    if (name.startsWith("x")){
+                        throw new IllegalArgumentException("Invalid name");
+                    }
+                    stmt.setString(1, name);
+                    stmt.executeUpdate();
+                }
+                conn.commit();
+            } catch (IllegalArgumentException iae){
+                conn.rollback();
+            }
+        } catch (SQLException sqle){
+            throw new IllegalStateException("Can't insert", sqle);
+        }
+    }
+
+    private long getIdByStatement(PreparedStatement stmt) {
+        try (
+                ResultSet rs = stmt.getGeneratedKeys()
+                ) {
+            if (rs.next()) {
+                return rs.getLong(1);
+            }
+            throw new IllegalStateException("Can't get id");
+        } catch (SQLException sqle){
+            throw new IllegalStateException("Can't get id", sqle);
         }
     }
 
