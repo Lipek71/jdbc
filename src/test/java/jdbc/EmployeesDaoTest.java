@@ -67,4 +67,19 @@ class EmployeesDaoTest {
         List<String> names = employeesDao.listEmployeeNames();
         assertEquals(Collections.emptyList(), names);
     }
+
+    @Test
+    public void testOddNames() {
+        employeesDao.createEmployees(Arrays.asList("Jack Doe", "Jane Doe", "Joe Doe"));
+        List<String> names = employeesDao.listOddEmployeeNames();
+        assertEquals(Arrays.asList("Jack Doe", "Joe Doe"), names);
+    }
+
+    @Test
+    public void testUpdateNames() {
+        employeesDao.createEmployees(Arrays.asList("Jack Doe", "Jane Doe", "Joe Doe"));
+        employeesDao.updateNames();
+        List<String> names = employeesDao.listEmployeeNames();
+        assertEquals(Arrays.asList("Mr. Jack Doe", "Jane Doe", "Mr. Joe Doe"), names);
+    }
 }

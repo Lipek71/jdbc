@@ -3,6 +3,7 @@ package jdbc;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class EmployeesDao {
@@ -76,6 +77,46 @@ public class EmployeesDao {
             return names;
         } catch (SQLException se) {
             throw new IllegalStateException("Can't select employees", se);
+        }
+    }
+
+    public List<String> listOddEmployeeNames(){
+        try (
+                Connection conn = dataSource.getConnection();
+                Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                ResultSet rs = stmt.executeQuery("SELECT emp_name FROM employees ORDER BY emp_name")) {
+
+            if (!rs.next()){
+                return Collections.EMPTY_LIST;
+            }
+            List<String> names = new ArrayList<>();
+            names.add(rs.getString("emp_name"));
+            while (rs.relative(2)) {
+                names.add(rs.getString("emp_name"));
+            }
+            return names;
+
+        } catch (SQLException se) {
+            throw new IllegalStateException("Can't list names", se);
+        }
+    }
+
+    public void updateNames(){
+        try (
+                Connection conn = dataSource.getConnection();
+                Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                ResultSet rs = stmt.executeQuery("SELECT id, emp_name FROM employees")){
+
+            while (rs.next()){
+                String name = rs.getString("emp_name");
+                if (!name.startsWith("Jane")){
+                    rs.updateString("emp_name", "Mr. " + name);
+                    rs.updateRow();
+                }
+            }
+
+        } catch (SQLException se){
+            throw new IllegalStateException("Can't update names", se);
         }
     }
 
