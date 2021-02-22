@@ -2,19 +2,15 @@ package jdbc;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
 import org.flywaydb.core.Flyway;
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.sql.DataSource;
-
-import javax.sql.DataSource;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 class EmployeesDaoTest {
@@ -28,12 +24,10 @@ class EmployeesDaoTest {
         dataSource.setUser("employees");
         dataSource.setPassword("employees");
 
-        Flyway flyway = new Flyway();
-        flyway.setDataSource(dataSource);
+        Flyway flyway = Flyway.configure().dataSource(dataSource).load();
 
         flyway.clean();
         flyway.migrate();
-        System.out.println("Kész!");
 
         employeesDao = new EmployeesDao(dataSource);
     }
@@ -41,7 +35,8 @@ class EmployeesDaoTest {
     @Test
     public void testInsert() {
         employeesDao.createEmployee("John Doe");
-        assertEquals(Arrays.asList("John Doe"), employeesDao.listEmployeeNames());
+        employeesDao.createEmployee("Jane Doe");
+        assertEquals(Arrays.asList("John Doe", "Jane Doe"), employeesDao.listEmployeeNames());
     }
 
     @Test
