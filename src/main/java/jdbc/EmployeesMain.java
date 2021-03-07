@@ -29,7 +29,7 @@ public class EmployeesMain {
         } catch (SQLException se) {
             throw new IllegalStateException("Can't insert!");
         }*/
-        /*try (
+        try (
                 Connection conn = dataSource.getConnection();
                 PreparedStatement stmt = conn.prepareStatement("INSERT INTO employees(emp_name) VALUES (?)")) {
 
@@ -38,7 +38,7 @@ public class EmployeesMain {
 
         } catch (SQLException se) {
             throw new IllegalStateException("Can't insert!");
-        }*/
+        }
 
 
         EmployeesDao employeesDao = new EmployeesDao(dataSource);

@@ -1,0 +1,10 @@
+CREATE TABLE `activities` (
+	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`start_time` TIMESTAMP NULL DEFAULT NULL,
+	`activity_desc` VARCHAR(250) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
+	`activity_type` VARCHAR(10) NULL DEFAULT NULL COLLATE 'utf8_general_ci',
+	PRIMARY KEY (`id`) USING BTREE
+)
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+AUTO_INCREMENT=1;

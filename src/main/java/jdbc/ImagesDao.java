@@ -7,11 +7,11 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.sql.*;
 
-public class ImagesDAO {
+public class ImagesDao {
 
     private DataSource dataSource;
 
-    public ImagesDAO(DataSource dataSource) {
+    public ImagesDao(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 

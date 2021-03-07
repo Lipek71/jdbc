@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ImagesDAOTest {
 
-    private ImagesDAO imagesDAO;
+    private ImagesDao imagesDAO;
 
     @BeforeEach
     public void init() {
@@ -28,7 +28,7 @@ class ImagesDAOTest {
         flyway.migrate();
         System.out.println("Kész!");
 
-        imagesDAO = new ImagesDAO(dataSource);
+        imagesDAO = new ImagesDao(dataSource);
     }
 
     @Test
