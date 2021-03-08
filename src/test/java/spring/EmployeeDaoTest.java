@@ -18,20 +18,22 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class EmployeeDaoTest {
 
     @Autowired
-    private final Flyway flyway;
+    private Flyway flyway;
 
     @Autowired
-    private final EmployeeDao employeeDao;
+    private EmployeeDao employeeDao;
 
-    EmployeeDaoTest(Flyway flyway, EmployeeDao employeeDao) {
-        this.flyway = flyway;
-        this.employeeDao = employeeDao;
-    }
+
 
     @BeforeEach
     void setUp() {
         flyway.clean();
         flyway.migrate();
+    }
+
+    @Test
+    void testTest(){
+
     }
 
     @Test
