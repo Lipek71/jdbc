@@ -29,7 +29,7 @@ public class MetaDataDao {
 
     private List<String> getTableNamesByMetaData(DatabaseMetaData metaData) throws SQLException {
         try (
-                ResultSet rs = metaData.getTables(null, "employees", null, null)
+                ResultSet rs = metaData.getTables("employees",null , null, null)
         ) {
             List<String> names = new ArrayList<>();
             while (rs.next()){

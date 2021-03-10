@@ -22,7 +22,7 @@ class ImagesDAOTest {
         dataSource.setUser("employees");
         dataSource.setPassword("employees");
 
-        Flyway flyway = Flyway.configure().dataSource(dataSource).load();
+        Flyway flyway = Flyway.configure().locations("filesystem:src/main/resources/db/migration/employees").dataSource(dataSource).load();
 
         flyway.clean();
         flyway.migrate();

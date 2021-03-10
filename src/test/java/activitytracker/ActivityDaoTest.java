@@ -5,6 +5,7 @@ import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
@@ -96,16 +97,6 @@ class ActivityDaoTest {
 
     @Test
     void testListActivitiesEmpty() {
-        TrackPoint trackPoint01 = new TrackPoint(1, LocalDateTime.of(2021, 2, 21, 10, 0, 0), 42.2342, 18.2355);
-        TrackPoint trackPoint02 = new TrackPoint(1, LocalDateTime.of(2021, 2, 21, 10, 30, 0), 42.2442, 18.2655);
-
-        List<TrackPoint> trackPoints = Arrays.asList(trackPoint01, trackPoint02);
-
-        Activity activity01 = new Activity(1, LocalDateTime.of(2021, 2, 21, 10, 0, 0), "Mátra", ActivityType.RUNNING, trackPoints);
-        Activity activity02 = new Activity(1, LocalDateTime.of(2021, 2, 20, 14, 0, 0), "Gerecse", ActivityType.BIKING, trackPoints);
-        Activity activity03 = new Activity(1, LocalDateTime.of(2021, 3, 1, 12, 0, 0), "Budapest", ActivityType.BASKETBALL, trackPoints);
-
-
         assertEquals(Collections.EMPTY_LIST, activityDao.listActivities());
 
     }
@@ -147,4 +138,28 @@ class ActivityDaoTest {
 
         assertEquals(Collections.EMPTY_LIST, activityDao.findActivityById(2).getTrackPoints());
     }
+
+    @Test
+    void testImageSave() {
+        TrackPoint trackPoint01 = new TrackPoint(1, LocalDateTime.of(2021, 2, 21, 10, 0, 0), 42.2342, 18.2355);
+        TrackPoint trackPoint02 = new TrackPoint(1, LocalDateTime.of(2021, 2, 21, 10, 30, 0), 42.2442, 18.2655);
+
+        List<TrackPoint> trackPoints = Arrays.asList(trackPoint01, trackPoint02);
+
+        Activity activity01 = new Activity(1, LocalDateTime.of(2021, 2, 21, 10, 0, 0), "Mátra", ActivityType.RUNNING, trackPoints);
+        Activity activity02 = new Activity(1, LocalDateTime.of(2021, 2, 20, 14, 0, 0), "Gerecse", ActivityType.BIKING, trackPoints);
+        Activity activity03 = new Activity(1, LocalDateTime.of(2021, 3, 1, 12, 0, 0), "Budapest", ActivityType.BASKETBALL, trackPoints);
+
+        activityDao.saveActivity(activity01);
+        activityDao.saveActivity(activity02);
+        activityDao.saveActivity(activity03);
+
+        Image image = new Image(1, "kep.jpg","Ez egy nagyon nagy képet képvisel".getBytes(StandardCharsets.ISO_8859_1));
+
+        activityDao.saveImageToActivity(1,image);
+
+        assertEquals("kep.jpg", activityDao.loadImageToActivity(1, "kep.jpg").getFilename());
+
+    }
+
 }

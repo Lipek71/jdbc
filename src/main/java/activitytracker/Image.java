@@ -11,4 +11,16 @@ public class Image {
         this.filename = filename;
         this.content = content;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public byte[] getContent() {
+        return content;
+    }
 }

@@ -4,12 +4,11 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.Reader;
 import java.sql.*;
 
 public class ImagesDao {
 
-    private DataSource dataSource;
+    private final DataSource dataSource;
 
     public ImagesDao(DataSource dataSource) {
         this.dataSource = dataSource;
